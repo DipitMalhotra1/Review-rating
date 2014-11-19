@@ -1,0 +1,48 @@
+import json
+import nltk
+
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+ 
+from sqlalchemy_declarative import  Base, Review
+ 
+engine = create_engine('sqlite:///sqlalchemy_try.db')
+Base.metadata.bind = engine
+DBSession = sessionmaker(bind=engine)
+
+session = DBSession()
+
+
+with open('small_rev.json') as f:
+	data=f.read()
+	jsondata=json.loads(data)
+ 
+
+for row in jsondata['rows']:
+	r = Review(row['business_id'])
+	
+	 # int(jsondata['votes']['useful']))
+	
+	session.add(r)
+	print row
+	session.commit
+# for row in session().query(Review): 
+# 	print row
+
+
+	
+		
+	
+		
+	
+
+#  # for row in jsondata:
+# 	# new_rating row.get['votes']['useful']	
+# for row in jsondata['rows']:
+# 	new_rating=Rating.new
+# 	new_rating.business_id=row['business_id']
+# 	new_rating.useful=rows['votes']['useful']
+# new_rating=Review('business_id',2)
+# session.add(new_rating)
+
