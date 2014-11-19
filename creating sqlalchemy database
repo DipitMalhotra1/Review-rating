@@ -1,0 +1,29 @@
+import os
+import sys
+from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
+from sqlalchemy import create_engine
+import json
+ 
+Base = declarative_base()
+ 
+class Review(Base):
+    __tablename__ = 'rev'
+    
+    id=Column(Integer,primary_key=True)
+    new_business_id = Column(String(50))
+    #useful = Column(Integer)
+    # initial_rating=Column(Integer)
+
+    def __init__(self,business_id):
+        self.business_id=business_id
+    #     self.count=0
+
+        #self.useful=useful
+        # self.initial_rating=initial_rating
+
+
+engine = create_engine('sqlite:///sqlalchemy_try.db')
+ 
+Base.metadata.create_all(engine)
