@@ -1,0 +1,78 @@
+import json
+import nltk
+import re
+from nltk import word_tokenize, pos_tag
+
+positiverange4 = ['legendary', 'legend', 'finest', 'insane', 'best']
+positiverange3 = ['favorite', 'favourite', 'fav', 'delicious', 'awesome', 'perfect', 'perfection', 'perfectly', 'scrumptous']
+positiverange2 = ['love', 'courteous', 'great', 'generous', 'tasty', 'pleasent', 'polite']
+positiverange1 = ['like', 'enjoyable', 'enjoy', 'reasonable', 'huge', 'plentiful', 'plenty', 'quick', 'enjoyed', 'fast', 'swift']
+neutralrange   = ['ok', 'fine', 'good', 'nice', 'gud', 'friendly', 'fresh', 'cheap']
+negativerange1 = ['crowded', 'lousy', 'slow', 'bad']
+negativerange2 = ['rude', 'worse', 'undercooked']
+negativerange3 = ['filthy']
+negativerange4 = ['worst', 'terrible', 'horrible', 'disgusting']
+
+with open('hundred_review.json') as f:
+	data=f.read()
+	jsondata=json.loads(data)
+
+# for row in jsondata['rows']:
+# 	y= row['votes']
+# 	use.append(y)
+# 	#print use
+
+	
+for row in jsondata['rows']:
+	a= row['text']
+	b=str(a)
+
+	adjectives =[token for token, pos in pos_tag(word_tokenize(b)) if pos.startswith('JJ')]
+	print str(adjectives)
+
+	# z=[]
+	# z.append(adjectives)	
+	#print z
+
+
+val=0
+count = 0
+
+for w in adjectives:
+	if w in positiverange4:
+		val += 4 
+		count=count + 1
+	elif w in positiverange3:
+		val += 3
+		count = count + 1
+	elif w in positiverange2:
+		val += 2
+		count = count + 1
+	elif w in positiverange1:
+		val += 1
+		count = count + 1
+	elif w in neutralrange:
+		val += 0
+		count = count + 1
+	elif w in negativerange1:
+		val -= 1
+		count = count + 1
+	elif w in negativerange2:
+		val -= 2
+		count = count + 1
+	elif w in negativerange3:
+		val -= 3
+		count = count + 1	
+	elif w in negativerange4:
+		val -= 4
+		count = count + 1
+	else:
+		count=count+1									
+print count
+	#print val
+if val == 0:
+	FinalVal = 0
+	print FinalVal
+else:	
+	FinalVal = float(val)/(count)
+	print FinalVal	
