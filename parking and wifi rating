@@ -1,0 +1,139 @@
+import nltk
+import json
+import math
+
+import re
+positiverange4 = ['legendary', 'legend', 'finest', 'insane', 'best']
+positiverange3 = ['favorite',  'excellent' ,'favourite', 'fav', 'delicious', 'awesome', 'perfect', 'perfection', 'perfectly', 'scrumptous']
+positiverange2 = ['love', 'courteous', 'great', 'generous', 'tasty', 'pleasent', 'polite']
+positiverange1 = ['like', 'enjoyable', 'enjoy', 'reasonable', 'huge', 'plentiful', 'plenty', 'quick', 'enjoyed', 'fast', 'swift']
+neutralrange   = ['ok', 'fine', 'good', 'nice', 'gud', 'friendly', 'fresh', 'cheap']
+negativerange1 = ['crowded', 'lousy', 'slow', 'bad']
+negativerange2 = ['rude', 'worse', 'undercooked']
+negativerange3 = ['filthy']
+negativerange4 = ['worst', 'terrible', 'horrible', 'disgusting']
+val=0
+count = 0
+from nltk import pos_tag,word_tokenize
+#with open("small_rev.json") as f:
+f=open('small_rev.json')
+for line in f:
+    line=line.rstrip()
+    res= re.search("\.([^\.]*parking[^\.]*)",line)
+    if res is not None:
+    
+        #print res.group(1)
+
+        a=str(res.group(1))
+        #print a
+#         if 'parking'in line:
+#             a  = line
+#             print a 
+#             #b=str(a)
+#             #print b
+#             #print pos_tag(word_tokenize(a))
+        adjectives =[token for token, pos in pos_tag(word_tokenize(a)) if pos.startswith('JJ')]
+        #print adjectives
+
+
+
+
+        for w in adjectives:
+            if w in positiverange4:
+                val += 4 
+                count += 1
+            elif w in positiverange3:
+                val += 3
+                count += 1
+            elif w in positiverange2:
+                val += 2
+                count += 1
+            elif w in positiverange1:
+                val += 1
+                count += 1
+            elif w in neutralrange:
+                val += 0
+                count += 1
+            elif w in negativerange1:
+                val -= 1
+                count += 1
+            elif w in negativerange2:
+                val -= 2
+                count += 1
+            elif w in negativerange3:
+                val -= 3
+                count += 1  
+            elif w in negativerange4:
+                val -= 4
+                count += 1
+            else:
+                count=count+1                                  
+print val
+print count
+
+scaled_value = float(val)/(count)
+dummy_var=float(scaled_value)*10
+#print dummy_var
+decimal_scaled=(dummy_var%10)/10
+#print decimal_scaled
+integer_scaled=float(scaled_value) - float(decimal_scaled)
+#print float(integer_scaled)
+# if integer_scaled==0:
+#     rating_scaled=3
+
+if 0 < integer_scaled <=1:
+    rating_scaled=3.5
+elif 1 < integer_scaled <= 2:
+    rating_scaled=4 
+elif 2<integer_scaled<=3:
+    rating_scaled=4.5
+elif 3 < integer_scaled <=4:
+    rating_scaled=5
+elif -1<integer_scaled<=0:
+    rating_decimal=3
+elif -2< integer_scaled<=-1:
+    rating_scaled=2.5
+elif -3<integer_scaled<=-2:
+    rating_scaled=2
+elif -4<integer_scaled<=-3:
+    rating_scaled=1.5
+
+
+print rating_scaled 
+
+rating_decimal=(decimal_scaled/2)
+#print rating_decimal
+
+Final_rating= rating_decimal+rating_scaled
+print round(Final_rating,1)
+
+
+
+
+
+           
+        
+# for Finalval in frange(0.0,1.0):
+    
+#     Finalval=3.5
+# for Finalval in range(1,2):
+    
+#     Finalval=4     
+# for Finalval in range(2,3):
+#     Finalval=4.5
+# for Finalval in range(-1,0):
+#     Finalval=3
+# for Finalval in range(-2,-1):
+#     Finalval=2.5
+# for Finalval in range(-2,-3):
+#     Finalval=2
+# for Finalval in range(3,4):
+#     Finalval=5
+# for Finalval in range(-3,-4):         
+#     Finalval=1.5
+# for Finalval in range(-4,-5):         
+#     Finalval=1
+
+
+# print Finalval    		
+      
